@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MusicApp</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application" %>
+  </head> 
+  <header>
+    <div id="parent_header">
+      <div id="older_child">
+        <h2>Music App</h2>
+      </div>
+        <% if logged_in? %> 
+        <% idx = current_user.email.index('@') %>
+          <div id="older_child">
+            <p>Welcome <%= current_user.email[0...idx].capitalize %></p>
+          </div>
+        <% else %>
+          <div id="older_child">
+            <p>Logged Out</p>
+          </div>        
+        <% end %>
+      
+    </div>
+    
+  </header>
+  
+  <body>
+    <div id="a_link">
+      <% if !logged_in? %> <a href="<%= new_session_url%>">Sign In</a> <% end %>
+      
+    </div> 
+    <div id="a_link">
+        <a href="<%= new_user_url%>">Sign Up</a>
+    </div>
+    
+    <%= yield %>
+    
+    <div class="show"> 
+      <% if flash[:msg]  %>
+        <% flash[:msg].each do |msg| %>
+            <%= msg %>
+        <% end %>
+      <% end %>
+    </div>
+    
+      
+  
+    <% if logged_in? %>
+        <form class="show" action="<%=session_url%>" method="POST">
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+          <input type="hidden" name="_method" value="DELETE">
+          <button>Log Out</button>
+        </form>
+        <br>  
+    <% end %>
+  </body>
+</html>
